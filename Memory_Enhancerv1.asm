@@ -8,7 +8,7 @@ ORG 100h
 
 
 PRINTN ' '
-PRINTN 'Welcome to Memory Enhancer V1.0'	;messages displayed to the user
+PRINTN 'Welcome to Memory Enhancer V1.0'		;messages displayed to the user
 PRINTN 'Written by Ahmed Khalifa'
 PRINTN ''
 
@@ -16,38 +16,38 @@ PRINTN 'Press a key from 1 to 5 to listen to different tones'
 PRINTN 'Press 6 to start playing'
 PRINTN ''
 
-call Practice						;procedure that ends when the user presses 6
+call Practice				;procedure that ends when the user presses 6
 
 mov DI, 7000
 mov BX, 0
 mov DX, 0
 
 Start: 	call GetRandomNumber		;generate a randon number from 1 to 5
-	MOV [DI], AL					;store it into memory
+	MOV [DI], AL			;store it into memory
 	INC DI
 	INC BX
-	call Play						;playing a tone based on the random number generated
+	call Play			;playing a tone based on the random number generated
 	
 	mov CX, BX
 	MOV BP, DI
 	SUB BP, BX
 	
-check:	call GetKey					;get user response
-	CMP [BP], AL					;compare it with what is stored in memory
+check:	call GetKey			;get user response
+	CMP [BP], AL			;compare it with what is stored in memory
 	JNE EXIT
 	INC BP
-	loop check						;loop as many times as the number of tones stored in memory
+	loop check			;loop as many times as the number of tones stored in memory
 	
 	INC DX
-	call PlaySequence				;play the sequence of tones the user has entered so far
+	call PlaySequence		;play the sequence of tones the user has entered so far
 	JMP Start
 
 
 Exit:	MOV AX, DX
-	LEA DX, exit_message1			;Exit messages
+	LEA DX, exit_message1		;Exit messages
 	call WriteMessageToScreen
 	
-	call print_num					;print the number of tones the user has remembered
+	call print_num			;print the number of tones the user has remembered
 	
 	LEA DX, exit_message2
 	call WriteMessageToScreen
@@ -77,7 +77,7 @@ Delay proc
 		mov CX, 4000		;number of times the inner loop will have
 				
 	
-	inner:	nop				;wasting time (delaying)
+	inner:	nop			;wasting time (delaying)
 		loop inner
 		
 		POP CX	
@@ -95,9 +95,9 @@ TurnSpeakerOn	proc
 
 		PUSH AX
 		
-		In al, 61h			;read current state of port 61h
-		Or al, 3			;set B0 and B1 to logic 1
-		Out 61h, al			;write to port
+		In al, 61h		;read current state of port 61h
+		Or al, 3		;set B0 and B1 to logic 1
+		Out 61h, al		;write to port
 		
 		POP AX
 
@@ -112,10 +112,10 @@ GenerateTone	PROC
 		PUSH AX
 			
 		Mov al, 0b6h		;select counter 2, mode 3 binary counting
-		Out 43h, al			;output control word to counter/timer
-		Mov al, cl			;output lower byte of counter value
+		Out 43h, al		;output control word to counter/timer
+		Mov al, cl		;output lower byte of counter value
 		Out 42h, al
-		Mov al, ch			;output upper byte of counter value
+		Mov al, ch		;output upper byte of counter value
 		Out 42h, al
 			
 		POP AX
@@ -130,7 +130,7 @@ TurnSpeakerOff	proc
 		PUSH AX
 				
 		In al, 61h		;read current state of port 61h
-		And al, 0fch	;set B0 and B1 to logic 0
+		And al, 0fch		;set B0 and B1 to logic 0
 		Out 61h, al		;write to port
 		
 		POP AX
@@ -154,7 +154,7 @@ GetKey ENDP
 
 Practice Proc
 	
-	again:	call GetKey	;get user input
+	again:	call GetKey		;get user input
 		CMP AL, 6		;check if it is not equal to 6
 		JE Exit1	
 	
@@ -209,7 +209,7 @@ Play Proc
 
 		PUSH CX
 	
-		MOV CL, AL			;mapping from [1 2 3 4 5] to [0 2 4 6 8]
+		MOV CL, AL		;mapping from [1 2 3 4 5] to [0 2 4 6 8]
 		dec CL
 		PUSH AX
 		mov AL, 2
@@ -244,7 +244,7 @@ PlaySequence Proc
 		SUB BP, BX
 	
 	again2:	MOV AL, [BP]		;reads the values stored in momory
-		CALL play				;and plays the corresponding tones
+		CALL play		;and plays the corresponding tones
 		INC BP
 		loop again2
 		
@@ -261,8 +261,8 @@ WriteMessageToScreen proc
 	
 		PUSH AX
 		Mov ah, 9			
-		Int 21h				;INT21 function 09H: Display a string. the pointer to 
-							;the string should be in DS:DX
+		Int 21h			;INT21 function 09H: Display a string. the pointer to 
+					;the string should be in DS:DX
 		POP AX
 ret
 				
