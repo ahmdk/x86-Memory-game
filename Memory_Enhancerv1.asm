@@ -75,7 +75,7 @@ Delay proc
 		mov CX, 4000		;number of times the inner loop will have
 				
 	
-	inner:	nop			;wasting time (delaying)
+	inner:	nop			;spin (delaying)
 		loop inner
 		
 		POP CX	
