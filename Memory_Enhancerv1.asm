@@ -1,8 +1,6 @@
 #make_COM#
 include emu8086.inc
 
-;PLEASE MAXIMIZE THE ASSEMBLER WINDOW 
-;TO BETTER VIEW THE CODE
 ; COM file is loaded at CS:0100h
 ORG 100h
 
